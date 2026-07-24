@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Admin - DEVWEBSTORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+
+  <!-- LOGIN MODAL -->
+  <div id="admin-login-modal" class="fixed inset-0 bg-slate-950 flex items-center justify-center p-4 z-50">
+    <form id="admin-login-form" class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-sm w-full space-y-4 shadow-2xl">
+      <h2 class="text-2xl font-black text-center text-white">Sehatra Admin</h2>
+      <p class="text-xs text-slate-400 text-center">Teny miafina par défaut: <span class="text-emerald-400 font-bold">1234</span></p>
+      <input type="password" id="admin-pass-input" placeholder="Teny miafina" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-500" required />
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl transition-all">Hiditra</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD MAIN -->
+  <div id="admin-dashboard" class="hidden max-w-7xl mx-auto p-6 space-y-10">
+    <header class="flex justify-between items-center border-b border-slate-800 pb-6">
+      <h1 class="text-2xl font-black text-white flex items-center gap-2">⚙️ Admin Dashboard - DEVWEBSTORE</h1>
+      <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl">Hiverina amin'ny Site</a>
+    </header>
+
+    <!-- ADD PRODUCT FORM -->
+    <section class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 space-y-4">
+      <h2 class="text-lg font-bold text-emerald-400">Ampidiro Vokatra Vaovao</h2>
+      <form id="add-product-form" class="grid md:grid-cols-2 gap-4">
+        <input type="text" id="prod-title" placeholder="Anaran'ny Vokatra" class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-sm text-white" required />
+        <input type="number" id="prod-price" placeholder="Maimaim-poana / Prix (Ar)" class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-sm text-white" required />
+        <select id="prod-cat" class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-sm text-white">
+          <option value="High-Tech">High-Tech</option>
+          <option value="Mode">Mode</option>
+          <option value="Maison">Trano</option>
+        </select>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Sary (<150KB Auto Canvas Compress)</label>
+          <input type="file" id="prod-img-file" accept="image/*" class="text-xs text-slate-300" />
+          <input type="hidden" id="prod-img-base64" />
+          <img id="prod-img-preview" class="w-16 h-16 object-cover rounded mt-2 hidden border border-emerald-500" />
+        </div>
+        <textarea id="prod-desc" placeholder="Famaritana ny vokatra..." class="md:col-span-2 bg-slate-900 border border-slate-700 p-3 rounded-xl text-sm text-white h-20"></textarea>
+        <button type="submit" class="md:col-span-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl transition-colors">Tehirizo ny Vokatra</button>
+      </form>
+    </section>
+
+    <!-- PRODUCTS TABLE -->
+    <section class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700">
+      <h2 class="text-lg font-bold text-white mb-4">Lisitry ny Vokatra</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-slate-300">
+          <thead class="bg-slate-900 text-slate-400 uppercase text-xs">
+            <tr>
+              <th class="p-3">Sary</th>
+              <th class="p-3">Anarana</th>
+              <th class="p-3">Prix</th>
+              <th class="p-3">Sokajy</th>
+              <th class="p-3">Atao</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-list">
+            <!-- Dynamic -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ORDERS LIST -->
+    <section class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 space-y-4">
+      <h2 class="text-lg font-bold text-amber-400">Kaomandy Voaray (Orders)</h2>
+      <div id="admin-orders-list" class="grid md:grid-cols-2 gap-4">
+        <!-- Dynamic -->
+      </div>
+    </section>
+
+    <!-- MESSAGES LIST -->
+    <section class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 space-y-4">
+      <h2 class="text-lg font-bold text-indigo-400">Hafatra Voaray (Messages)</h2>
+      <div id="admin-messages-list" class="space-y-3">
+        <!-- Dynamic -->
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 max-w-md">
+      <h2 class="text-lg font-bold text-rose-400 mb-2">Fiarovana Admin</h2>
+      <form id="security-form" class="space-y-3">
+        <input type="password" id="new-password" placeholder="Teny miafina vaovao" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl text-sm text-white" required />
+        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-2.5 rounded-xl text-xs">Hanova Mot de Passe</button>
+      </form>
+    </section>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
