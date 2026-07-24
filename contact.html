@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - DEVWEBSTORE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+  <main class="max-w-3xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-extrabold text-slate-900 mb-6">Hafatra na Laiso</h1>
+    <form id="contact-form" class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Anarana</label>
+        <input type="text" id="c-name" required class="w-full border p-3 rounded-xl text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Email / Telefaonina</label>
+        <input type="text" id="c-info" required class="w-full border p-3 rounded-xl text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">Hafatra</label>
+        <textarea id="c-msg" required class="w-full border p-3 rounded-xl text-sm h-32"></textarea>
+      </div>
+      <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl hover:bg-emerald-700 transition-colors">Andefaso Hafatra</button>
+    </form>
+  </main>
+  <script type="module">
+    import { db, collection, addDoc } from './firebase-config.js';
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await addDoc(collection(db, 'messages'), {
+        name: document.getElementById('c-name').value,
+        email: document.getElementById('c-info').value,
+        message: document.getElementById('c-msg').value,
+        createdAt: new Date().toISOString()
+      });
+      alert('Lasa ny hafatrao!');
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
