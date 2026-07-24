@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique En Ligne Modern - E-Commerce Madagascar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+  <!-- CART OVERLAY & DRAWER -->
+  <div id="cart-overlay" class="cart-overlay"></div>
+  <div id="cart-drawer" class="cart-drawer flex flex-col justify-between p-6">
+    <div>
+      <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+        <h2 class="text-xl font-extrabold text-slate-900">Ny Haronao (Panier)</h2>
+        <button id="close-cart" class="text-2xl font-bold text-slate-400 hover:text-slate-700">&times;</button>
+      </div>
+      <div id="cart-items" class="mt-4 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+        <!-- Dynamic Cart Items -->
+      </div>
+    </div>
+    <div class="border-t border-slate-100 pt-4 space-y-3">
+      <div class="flex justify-between items-center font-extrabold text-lg">
+        <span>Fitambarany:</span>
+        <span id="cart-subtotal" class="text-emerald-600">0 Ar</span>
+      </div>
+      <button id="checkout-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+        Hanohatra Fandoavam-bola (Commander)
+      </button>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div id="payment-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[10000] flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button id="close-payment" class="absolute top-4 right-4 text-slate-400 text-2xl font-bold hover:text-slate-700">&times;</button>
+      <h3 class="text-2xl font-black text-slate-900 mb-2">Fandoavam-bola (Paiement)</h3>
+      <p class="text-xs text-slate-500 mb-6">Misafidiana Mobile Money hamoahana ny kaomandinao.</p>
+      <form id="payment-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Anarana feno</label>
+          <input type="text" id="cust-name" required class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Rakoto Jean" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Laharana Telefaonina</label>
+          <input type="tel" id="cust-phone" required class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="034 00 000 00" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Fomba fandoavam-bola</label>
+          <select id="cust-provider" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="MVola">MVola (Telma)</option>
+            <option value="Orange Money">Orange Money</option>
+            <option value="Airtel Money">Airtel Money</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-slate-900 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-all mt-4">
+          Mamarana ny Kaomandy
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+      <a href="index.html" class="flex items-center gap-2 font-black text-2xl tracking-tight text-slate-900">
+        <span class="bg-emerald-600 text-white p-2 rounded-xl text-lg">🛍️</span>
+        DEVWEB<span class="text-emerald-600">STORE</span>
+      </a>
+      <nav class="hidden md:flex gap-8 font-semibold text-sm text-slate-600">
+        <a href="index.html" class="text-emerald-600">Fandraisana</a>
+        <a href="produits.html" class="hover:text-emerald-600 transition-colors">Vokatra All</a>
+        <a href="apropos.html" class="hover:text-emerald-600 transition-colors">Momba Anay</a>
+        <a href="realisations.html" class="hover:text-emerald-600 transition-colors">Galerie</a>
+        <a href="faq.html" class="hover:text-emerald-600 transition-colors">FAQ</a>
+        <a href="blog.html" class="hover:text-emerald-600 transition-colors">Blog</a>
+        <a href="contact.html" class="hover:text-emerald-600 transition-colors">Laiso</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <button id="cart-toggle" class="relative p-2.5 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors flex items-center justify-center">
+          <span class="text-xl">🛒</span>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+        </button>
+        <a href="admin.html" class="hidden sm:inline-block bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Espace Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- OPTION 1: HERO & PROMOTIONS -->
+  <section class="hero-gradient text-white py-20 lg:py-28 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <span class="inline-block bg-emerald-500/20 text-emerald-300 text-xs font-extrabold px-4 py-2 rounded-full border border-emerald-500/30 backdrop-blur-sm">
+          🔥 TSY MAZO TSY HOJERENA • RABAIS HATRANY AMIN'NY -40%
+        </span>
+        <h1 class="text-4xl sm:text-6xl font-black leading-tight tracking-tight">
+          Vokatra <span class="text-emerald-400">Matihanina</span> Mety Amin'ny Filandanao
+        </h1>
+        <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl">
+          Tadiavo eto ireo vokatra farany amin'ny endrika sy kalitao avo lenta indrindra. Fanaterana haingana manerana an'i Madagasikara sy fandoavam-bola azo antoka.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="produits.html" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold px-8 py-4 rounded-2xl shadow-xl hover:shadow-emerald-500/30 transition-all flex items-center gap-2">
+            Hijery Vokatra Katalaoga &rarr;
+          </a>
+          <a href="#promotions" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-8 py-4 rounded-2xl transition-all border border-white/10">
+            Promotions Ankehitriny
+          </a>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="absolute -inset-4 bg-emerald-500/20 rounded-3xl blur-2xl"></div>
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800" alt="Shopping Hero" class="relative rounded-3xl shadow-2xl object-cover w-full h-[400px] border border-white/10" />
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 2: CATÉGORIES -->
+  <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-3xl font-extrabold text-slate-900">Sokajy Lehibe (Catégories)</h2>
+      <p class="text-slate-500 text-sm mt-2">Misafidiana sokajy hitadiavana haingana ny vokatra mifanaraka aminao.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+        <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">📱</div>
+        <h3 class="font-bold text-slate-800 text-base">High-Tech & Gadgets</h3>
+        <p class="text-xs text-slate-400 mt-1">120+ Vokatra</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+        <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">👗</div>
+        <h3 class="font-bold text-slate-800 text-base">Mody & Styling</h3>
+        <p class="text-xs text-slate-400 mt-1">85+ Vokatra</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+        <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">🏠</div>
+        <h3 class="font-bold text-slate-800 text-base">Trano & Haingo</h3>
+        <p class="text-xs text-slate-400 mt-1">45+ Vokatra</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 text-center border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+        <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">✨</div>
+        <h3 class="font-bold text-slate-800 text-base">Aingam-panahy & Kanto</h3>
+        <p class="text-xs text-slate-400 mt-1">60+ Vokatra</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 3: PRODUITS POPULAIRES (FIRESTORE LIVE & STATIC MIX) -->
+  <section class="py-16 bg-slate-100/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <span class="text-emerald-600 font-extrabold text-xs uppercase tracking-wider">Maintin-dreny</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Produits Populaires</h2>
+        </div>
+        <a href="produits.html" class="text-emerald-600 font-bold text-sm hover:underline">Hijery ny rehetra &rarr;</a>
+      </div>
+      
+      <!-- Dynamic Container from Firestore -->
+      <div id="dynamic-products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Static Mock Backup while Loading -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 product-card flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 rounded-xl overflow-hidden mb-4 bg-slate-100">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" class="w-full h-full object-cover" />
+              <span class="badge-promo absolute top-3 left-3">Top Vente</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-lg mb-1">Casque Bluetooth Sans Fil</h3>
+            <p class="text-xs text-slate-500 line-clamp-2 mb-3">Feo mazava tsara miaraka amin'ny reduction de bruit active.</p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xl font-extrabold text-emerald-600">145,000 Ar</span>
+              <span class="text-xs text-slate-400 font-medium">Misy tahiry</span>
+            </div>
+            <button class="add-to-cart-btn w-full bg-slate-900 hover:bg-emerald-600 text-white py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+              data-id="p1"
+              data-title="Casque Bluetooth Sans Fil"
+              data-price="145000"
+              data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500">
+              Ampidiro amin'ny harona
+            </button>
+          </div>
+        </div>
+        <!-- End Static Mock -->
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 4: NOUVEAUTÉS -->
+  <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-emerald-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden">
+      <div class="relative z-10 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="bg-emerald-500/30 text-emerald-300 font-bold text-xs px-3 py-1 rounded-full border border-emerald-400/30">NOUVEAUTÉ 2025</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mt-4 mb-4">Montre Connectée Pro V3</h2>
+          <p class="text-slate-300 text-sm leading-relaxed mb-6">
+            Araho maso ny fahasalamanao sy ny hafatrao amin'ny fotoana rehetra. Batterie mitazona 14 andro feno.
+          </p>
+          <button class="add-to-cart-btn bg-white text-emerald-950 font-black px-6 py-3 rounded-xl hover:bg-emerald-400 transition-colors"
+            data-id="p_new1"
+            data-title="Montre Connectée Pro V3"
+            data-price="220000"
+            data-image="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500">
+            Avoaka Kaomandy (220,000 Ar)
+          </button>
+        </div>
+        <div class="flex justify-center">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" class="rounded-2xl shadow-2xl max-h-80 object-cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 5: MEILLEURES VENTES -->
+  <section class="py-16 bg-white border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-3xl font-extrabold text-slate-900">Meilleures Ventes</h2>
+        <p class="text-slate-500 text-sm mt-2">Ireo vokatra be mpitia indrindra sy nahazo naoty ambony amin'ity volana ity.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div class="border border-slate-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300" class="w-24 h-24 rounded-xl object-cover" />
+          <div>
+            <span class="text-xs text-amber-500 font-bold">★ 4.9 (120 avis)</span>
+            <h4 class="font-bold text-slate-800 text-base mt-1">Chaussure Running Red</h4>
+            <p class="text-emerald-600 font-black text-sm mt-1">180,000 Ar</p>
+          </div>
+        </div>
+        <div class="border border-slate-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300" class="w-24 h-24 rounded-xl object-cover" />
+          <div>
+            <span class="text-xs text-amber-500 font-bold">★ 4.8 (95 avis)</span>
+            <h4 class="font-bold text-slate-800 text-base mt-1">Ecouteurs Pro Studio</h4>
+            <p class="text-emerald-600 font-black text-sm mt-1">95,000 Ar</p>
+          </div>
+        </div>
+        <div class="border border-slate-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex items-center gap-4">
+          <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=300" class="w-24 h-24 rounded-xl object-cover" />
+          <div>
+            <span class="text-xs text-amber-500 font-bold">★ 5.0 (88 avis)</span>
+            <h4 class="font-bold text-slate-800 text-base mt-1">Sac à Dos Waterproof</h4>
+            <p class="text-emerald-600 font-black text-sm mt-1">110,000 Ar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 6: AVIS CLIENTS -->
+  <section class="py-16 bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-3xl font-extrabold">Avis Clients (Manambara ny Mpampiasa)</h2>
+        <p class="text-slate-400 text-sm mt-2">Jereo ny hevitry ny mpanjifa efa nividy teto amintsika.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
+          <div class="text-amber-400 mb-3">★★★★★</div>
+          <p class="text-slate-300 text-sm italic mb-4">"Haingana be ny livraison teto Antananarivo. Tsara kalitao be ilay montre ary araka ny nantenaina!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 font-bold flex items-center justify-center text-slate-900">HR</div>
+            <div>
+              <h5 class="font-bold text-sm">Hery R.</h5>
+              <span class="text-xs text-slate-400">Mpanjifa Azo Antoka</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
+          <div class="text-amber-400 mb-3">★★★★★</div>
+          <p class="text-slate-300 text-sm italic mb-4">"Mora kely ny fandoavam-bola tamin'ny MVola, ary 100% matanjaka ilay casque studio!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-indigo-500 font-bold flex items-center justify-center text-white">MRA</div>
+            <div>
+              <h5 class="font-bold text-sm">Mialy R.</h5>
+              <span class="text-xs text-slate-400">Mpanjifa Tamatave</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
+          <div class="text-amber-400 mb-3">★★★★★</div>
+          <p class="text-slate-300 text-sm italic mb-4">"Service client tena amim-panajana sy haingana mamaly. Miverina mividy foana!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-amber-500 font-bold flex items-center justify-center text-slate-900">AN</div>
+            <div>
+              <h5 class="font-bold text-sm">Andry N.</h5>
+              <span class="text-xs text-slate-400">Mpanjifa Majunga</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 7: OFFRES SPÉCIALES -->
+  <section id="promotions" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-gradient-to-r from-amber-500 to-rose-500 rounded-3xl p-8 sm:p-12 text-white flex flex-col md:flex-row justify-between items-center gap-8 shadow-xl">
+      <div>
+        <span class="bg-white/20 text-white font-extrabold text-xs px-3 py-1 rounded-full uppercase">Toerana voafetra</span>
+        <h2 class="text-3xl sm:text-4xl font-black mt-2">Pack High-Tech Premium</h2>
+        <p class="text-amber-100 text-sm mt-2 max-w-md">Mividia Casque + Montre miaraka amin'ny fihenam-bidy -30% ankehitriny.</p>
+      </div>
+      <div class="text-center md:text-right">
+        <span class="text-3xl font-black block">310,000 Ar <span class="line-through text-amber-200 text-xl font-normal">420,000 Ar</span></span>
+        <a href="produits.html" class="inline-block mt-4 bg-slate-900 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-slate-800 transition-all shadow-lg">
+          Araraoty Ny Offer &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 8: FAQ SHORT PREVIEW -->
+  <section class="py-16 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-extrabold text-slate-900">Fanontaniana Matetika (FAQ)</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <h4 class="font-bold text-slate-800 text-base">Ahoana ny fomba handoavana ny vola?</h4>
+          <p class="text-slate-600 text-sm mt-2">Manohatra fandoavam-bola amin'ny MVola, Orange Money na Airtel Money ianao rehefa manao panier.</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <h4 class="font-bold text-slate-800 text-base">Mandra-pahoviana ny livraison?</h4>
+          <p class="text-slate-600 text-sm mt-2">Raha Antananarivo dia 24h indrindra, ary ho an'ny faritra kosa dia 48h hatramin'ny 72h.</p>
+        </div>
+      </div>
+      <div class="text-center mt-6">
+        <a href="faq.html" class="text-emerald-600 font-bold hover:underline text-sm">Hijery ny FAQ rehetra &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION 9: BLOG PREVIEW -->
+  <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-3xl font-extrabold text-slate-900">Momba ny Vaovao & Torohevitra</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8">
+      <article class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm flex flex-col md:flex-row">
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400" class="w-full md:w-48 h-48 object-cover" />
+        <div class="p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-emerald-600">Torohevitra High-Tech</span>
+            <h3 class="font-bold text-slate-800 text-lg mt-1 mb-2">Ahoana no fikojakojana ny batterie d'écouteurs?</h3>
+          </div>
+          <a href="blog.html" class="text-slate-900 font-extrabold text-xs hover:text-emerald-600">Hamaky Be Kokoa &rarr;</a>
+        </div>
+      </article>
+      <article class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm flex flex-col md:flex-row">
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400" class="w-full md:w-48 h-48 object-cover" />
+        <div class="p-6 flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold text-emerald-600">Mody & Styling</span>
+            <h3 class="font-bold text-slate-800 text-lg mt-1 mb-2">Ireo fironana vaovao amin'ity taona ity</h3>
+          </div>
+          <a href="blog.html" class="text-slate-900 font-extrabold text-xs hover:text-emerald-600">Hamaky Be Kokoa &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- OPTION 10: CONTACT & FOOTER -->
+  <footer class="bg-slate-950 text-slate-400 py-16 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div>
+        <a href="index.html" class="flex items-center gap-2 font-black text-xl text-white mb-4">
+          <span>🛍️</span> DEVWEBSTORE
+        </a>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Sehatra e-commerce manara-penitra indrindra eto Madagasikara. Azo antoka sy haingana amin'ny fandoavam-bola.
+        </p>
+      </div>
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4">Rohy Haingana</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="produits.html" class="hover:text-emerald-400">Vokatra Rehetra</a></li>
+          <li><a href="apropos.html" class="hover:text-emerald-400">Momba Anay</a></li>
+          <li><a href="faq.html" class="hover:text-emerald-400">Fanontaniana Matetika</a></li>
+          <li><a href="contact.html" class="hover:text-emerald-400">Laiso / Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4">Fandoavam-bola Azo Antoka</h4>
+        <p class="text-xs mb-3">Miasa amin'ny Mobile Money manerana ny Nosy:</p>
+        <div class="flex gap-2 text-xs font-black">
+          <span class="bg-yellow-500 text-slate-950 px-2.5 py-1 rounded">MVola</span>
+          <span class="bg-orange-500 text-white px-2.5 py-1 rounded">Orange</span>
+          <span class="bg-red-600 text-white px-2.5 py-1 rounded">Airtel</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-white font-bold text-sm mb-4">Laiso & Fanampiana</h4>
+        <p class="text-xs">📍 Antananarivo 101, Madagasikara</p>
+        <p class="text-xs mt-2">📞 +261 34 00 000 00</p> <p class="text-xs mt-2">✉️ contact@devwebstore.mg</p>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+      © 2025 DEVWEBSTORE. Ny zo rehetra dia voaaro. Nataon'i DEVWEB IA.
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
